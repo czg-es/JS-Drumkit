@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS DRUMKIT</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dk.css">
+
+</head>
+<body>
+    <div class="head">
+        <h2>808 Drumkit</h2>
+    </div>
+    <div class="keys">
+        <div  data-key="65" class="key">            <kbd>A</kbd>            <span class="sound">Kick</span>        </div>
+        <div  data-key="83" class="key">            <kbd>S</kbd>            <span class="sound">Snare</span>        </div>
+        <div  data-key="68" class="key">            <kbd>D</kbd>            <span class="sound">Clap</span>        </div>
+        <div  data-key="70" class="key">            <kbd>F</kbd>            <span class="sound">Closed hat</span>        </div>
+        <div  data-key="71" class="key">            <kbd>G</kbd>            <span class="sound">Open hat</span>        </div>
+        <div  data-key="72" class="key">            <kbd>H</kbd>            <span class="sound">Crash   </span>        </div>
+        <div  data-key="74" class="key">            <kbd>J</kbd>            <span class="sound">Low Tom</span>        </div>
+        <div  data-key="75" class="key">            <kbd>K</kbd>            <span class="sound">Mid Tom</span>        </div>
+        <div  data-key="76" class="key">            <kbd>L</kbd>            <span class="sound">Hi Tom</span>        </div>
+    </div>
+
+    <audio data-key="65" src="drums/808_R/Kick.wav" ></audio>   
+    <audio data-key="83" src="drums/808_R/Snare.wav" ></audio>
+    <audio data-key="68" src="drums/808_R/Clap.wav" ></audio>
+    <audio data-key="70" src="drums/808_R/Closed_hat.wav" ></audio>
+    <audio data-key="71" src="drums/808_R/Open_hat.wav" ></audio>
+    <audio data-key="72" src="drums/808_R/Crash.wav" ></audio>
+    <audio data-key="74" src="drums/808_R/Low_tom.wav" ></audio>
+    <audio data-key="75" src="drums/808_R/Mid_tom.wav" ></audio>
+    <audio data-key="76" src="drums/808_R/Hi_tom.wav" ></audio>
+
+<!-- <script src="dk.js"></script> -->
+    <script>
+        
+        function playSound(e){
+            const audio = document.querySelector(`audio[ data-key="${e.keyCode}"]`);
+            const key = document.querySelector(`.key[ data-key="${e.keyCode}"]`);
+            if(!audio) return; //exit the function
+            if (e.repeat) return; // to avoid repetition
+            audio.currentTime = 0; // rewind to starting point
+            audio.play();
+            //console.log(audio);
+            key.classList.add('playing');
+        }
+        
+        function removeTransition(e){
+            //console.log(e);
+            if(e.propertyName !== 'transform') return // skip if is not a transform
+            //console.log(e.propertyName);
+            this.classList.remove('playing');
+        }
+        
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+        window.addEventListener('keydown', playSound);
+        //window.addEventListener('click', playSound);
+
+        window.addEventListener('click', (e) =>{
+            if (event.target.classList.contains('key')){ 
+                const audio = document.querySelector(`audio[ data-key="${e.target.dataset.key}"]`);
+                if(!audio) return; //exit the function
+                if (e.repeat) return; // to avoid repetition
+                audio.currentTime = 0; // rewind to starting point
+                audio.play();
+                e.target.classList.add('playing');
+            }
+        });    
+    </script>
+</body>
+</html>
